@@ -21,7 +21,7 @@
     "test": "mocha test/setup.js test/specs",
     "test-lib": "npm run babel && TEST_LIB=1 npm t",
     "test-installed": "node scripts/install-local && LIB_PATH=.installed/node_modules/promise-controller npm t",
-    "ci": "npm run code && npm test-lib",
+    "ci": "npm run code && npm run test-lib",
     "docs": "node scripts/docs",
     "prerelease": "npm run code && npm test && npm run test-lib && npm run test-installed",
     "release": "npm version $VER && npm publish && git push --follow-tags --no-verify",
