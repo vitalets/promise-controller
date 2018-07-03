@@ -1,0 +1,19 @@
+{
+  "env": {
+    "mocha": true
+  },
+
+  "globals": {
+    "assert": false,
+    "noop": false,
+    "wait": false,
+    "safeReject": false,
+    "assertRejected": false
+  },
+
+  "rules": {
+    "max-statements": 0,
+    "max-lines": 0,
+    "max-nested-callbacks": 0
+  }
+}
