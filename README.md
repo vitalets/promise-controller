@@ -8,9 +8,9 @@ Advanced control over [Promise] lifecycle.
 
 ## Features
 
-* access to `resolve` / `reject` callbacks at any time
-* re-use existing promise if async operation is not finished
-* auto-reject after timeout
+* convenient access to `resolve` / `reject` callbacks
+* re-use existing promise while async operation is running
+* auto-reject after configured timeout
 
 ## Installation
 ```bash
