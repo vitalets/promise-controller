@@ -148,12 +148,12 @@ class PromiseController {
   }
 
   /**
-   * Sets timeout to reject promise automatically.
+   * Configures timeout for automatic promise rejection.
    *
    * @param {Number} ms delay in ms after that promise will be rejected automatically
-   * @param {String|Error|Function} [reason] rejection value. If it is string or error - promise will be rejected with
+   * @param {String|Error|Function} [reason] rejection value. If it is string or Error - promise will be rejected with
    * that error. If it is function - this function will be called after delay where you can manually resolve or reject
-   * promise via `.resolve() / .reject()` methods.
+   * promise via `.resolve() / .reject()` methods of controller.
    */
   timeout(ms, reason) {
     this._timeout = ms;
