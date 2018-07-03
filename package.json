@@ -1,6 +1,6 @@
 {
   "name": "promise-controller",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Advanced control of JavaScript promises",
   "author": {
     "name": "Vitaliy Potapov",
