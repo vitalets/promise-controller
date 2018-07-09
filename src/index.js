@@ -1,14 +1,9 @@
 /**
- * Promise controller.
- */
-
-/**
  * @ignore
  */
 const defaults = require('./defaults');
 
 /**
- * Promise controller.
  * @typicalname pc
  */
 class PromiseController {

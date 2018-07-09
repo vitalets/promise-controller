@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/npm/l/promise-controller.svg)](https://www.npmjs.com/package/promise-controller)
 <img align="right" src="https://user-images.githubusercontent.com/1473072/31122235-ad06e442-a843-11e7-8c7e-c24149b6eeda.png"/>
 
-Advanced control over [Promise] lifecycle.
+Advanced control of JavaScript promises.
 
 ## Installation
 ```bash
@@ -31,7 +31,7 @@ let promise = new Promise((resolve, reject) => {
 _resolve(value);
 ```
 
-It is actually the usecase for `PromiseController`:
+It is actually the use case for `PromiseController`:
 ```js
 let promise = promiseController.call(() => callAsyncFunciton());
 
@@ -54,7 +54,7 @@ function connectToDb() {
 }
 ```
 
-It is also the usecase for `PromiseController`:
+It is also the use case for `PromiseController`:
 ```js
 function connectToDb() {
   return promiseController.promise || promiseController.call(() => mongoClient.open());
@@ -62,26 +62,27 @@ function connectToDb() {
 ```
 
 ### 3. Auto-reject after configured timeout
-If you want promise to auto-reject after timeout:
+If you want to auto-reject promise after timeout:
 ```js
 let timer;
 let promise = new Promise((resolve, reject) => {
- callAsyncFunciton(data => {
+ callAsyncFunciton(() => {
    clearTimeout(timer);
-   resolve(data);
+   resolve();
  });
  timer = setTimeout(() => reject(new Error('Timeout')), 1000);
 });
 
 ```
-It can be also achieved with `PromiseController`:
+It can be achieved with `PromiseController` in more direct way:
 ```js
 let promiseController = new PromiseController({
-  timeout: 1000
+  timeout: 1000,
+  timeoutReason: 'Timeout'
 });
 
 let promise = promiseController.call(() => {
-   callAsyncFunciton(data => promiseController.resolve(data));
+   callAsyncFunciton(() => promiseController.resolve());
 })
 ```
 
@@ -91,8 +92,7 @@ let promise = promiseController.call(() => {
 
 <dl>
 <dt><a href="#PromiseController">PromiseController</a></dt>
-<dd><p>Promise controller.</p>
-</dd>
+<dd></dd>
 </dl>
 
 ### Typedefs
@@ -105,8 +105,6 @@ let promise = promiseController.call(() => {
 <a name="PromiseController"></a>
 
 ### PromiseController
-Promise controller.
-
 **Kind**: global class  
 
 * [PromiseController](#PromiseController)
@@ -242,6 +240,3 @@ Re-assign one or more options.
 
 ## License
 MIT @ [Vitaliy Potapov](https://github.com/vitalets)
-
-[Promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[Promises]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
