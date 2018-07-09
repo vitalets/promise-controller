@@ -1,5 +1,14 @@
 /**
  * Promise controller.
+ */
+
+/**
+ * @ignore
+ */
+const defaults = require('./defaults');
+
+/**
+ * Promise controller.
  * @typicalname pController
  */
 class PromiseController {
@@ -7,8 +16,11 @@ class PromiseController {
    * Creates promise controller. Unlike original Promise, it does not immediately call any function.
    * Instead it has [.call()](#PromiseController+call) method that calls provided function
    * and stores `resolve / reject` methods for future access.
+   *
+   * @param {Options} [options]
    */
-  constructor() {
+  constructor(options) {
+    this._options = Object.assign({}, defaults, options);
     this._resolve = null;
     this._reject = null;
     this._isPending = false;
@@ -17,9 +29,6 @@ class PromiseController {
     this._value = undefined;
     this._promise = null;
     this._timer = null;
-    this._timeout = 0;
-    this._timeoutReason = 'Promise rejected by timeout';
-    this._resetReason = 'Promise rejected by reset';
   }
 
   /**
@@ -77,15 +86,6 @@ class PromiseController {
   }
 
   /**
-   * Returns true if promise already called via `.call()` method.
-   *
-   * @returns {Boolean}
-   */
-  get isCalled() {
-    return this.isPending || this.isSettled;
-  }
-
-  /**
    * This method executes `fn` and returns promise. While promise is pending all subsequent calls of `.call(fn)`
    * will return the same promise. To fulfill that promise you should use `.resolve() / .reject()` methods.
    * If `fn` itself returns promise, then external promise is attached to it and fulfills together.
@@ -139,7 +139,7 @@ class PromiseController {
    */
   reset() {
     if (this._isPending) {
-      this.reject(new Error(this._resetReason));
+      this.reject(new Error(this._options.resetReason));
     }
     this._promise = null;
     this._isPending = false;
@@ -150,18 +150,12 @@ class PromiseController {
   }
 
   /**
-   * Configures timeout for automatic promise rejection.
+   * Re-assign one or more options.
    *
-   * @param {Number} ms delay in ms after that promise will be rejected automatically
-   * @param {String|Error|Function} [reason] rejection value. If it is string or Error - promise will be rejected with
-   * that error. If it is function - this function will be called after delay where you can manually resolve or reject
-   * promise via `.resolve() / .reject()` methods of controller.
+   * @param {Options} options
    */
-  timeout(ms, reason) {
-    this._timeout = ms;
-    if (reason !== undefined) {
-      this._timeoutReason = reason;
-    }
+  configure(options) {
+    Object.assign(this._options, options);
   }
 
   _createPromise() {
@@ -173,19 +167,18 @@ class PromiseController {
   }
 
   _handleTimeout() {
-    if (typeof this._timeoutReason === 'function') {
-      this._timeoutReason();
+    const {timeoutReason} = this._options;
+    if (typeof timeoutReason === 'function') {
+      timeoutReason();
     } else {
-      const error = typeof this._timeoutReason === 'string'
-        ? new Error(this._timeoutReason)
-        : this._timeoutReason;
+      const error = typeof timeoutReason === 'string' ? new Error(timeoutReason) : timeoutReason;
       this.reject(error);
     }
   }
 
   _createTimer() {
-    if (this._timeout) {
-      this._timer = setTimeout(() => this._handleTimeout(), this._timeout);
+    if (this._options.timeout) {
+      this._timer = setTimeout(() => this._handleTimeout(), this._options.timeout);
     }
   }
 

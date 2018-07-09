@@ -68,4 +68,9 @@ describe('call', function () {
     const p1 = this.cp.call(() => p2 = this.cp.promise);
     assert.equal(p1, p2);
   });
+
+  it('should reject by error inside fn', async function () {
+    const p = this.cp.call(() => {throw new Error('err');});
+    await assertRejected(p, 'err');
+  });
 });

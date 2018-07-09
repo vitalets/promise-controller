@@ -6,6 +6,7 @@ global.noop = () => {};
 global.wait = ms => new Promise(r => setTimeout(r, ms));
 global.safeReject = promise => promise.catch(() => {});
 global.assertRejected = assertRejected;
+global.PromiseController = PromiseController;
 
 beforeEach(function () {
   this.cp = new PromiseController();

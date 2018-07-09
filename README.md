@@ -87,6 +87,21 @@ let promise = promiseController.call(() => {
 
 ## API
 
+### Classes
+
+<dl>
+<dt><a href="#PromiseController">PromiseController</a></dt>
+<dd><p>Promise controller.</p>
+</dd>
+</dl>
+
+### Typedefs
+
+<dl>
+<dt><a href="#Options">Options</a> : <code>Object</code></dt>
+<dd></dd>
+</dl>
+
 <a name="PromiseController"></a>
 
 ### PromiseController
@@ -95,26 +110,30 @@ Promise controller.
 **Kind**: global class  
 
 * [PromiseController](#PromiseController)
-    * [new PromiseController()](#new_PromiseController_new)
+    * [new PromiseController([options])](#new_PromiseController_new)
     * [.promise](#PromiseController+promise) ⇒ <code>Promise</code>
     * [.value](#PromiseController+value) ⇒ <code>\*</code>
     * [.isPending](#PromiseController+isPending) ⇒ <code>Boolean</code>
     * [.isFulfilled](#PromiseController+isFulfilled) ⇒ <code>Boolean</code>
     * [.isRejected](#PromiseController+isRejected) ⇒ <code>Boolean</code>
     * [.isSettled](#PromiseController+isSettled) ⇒ <code>Boolean</code>
-    * [.isCalled](#PromiseController+isCalled) ⇒ <code>Boolean</code>
     * [.call(fn)](#PromiseController+call) ⇒ <code>Promise</code>
     * [.resolve([value])](#PromiseController+resolve)
     * [.reject([value])](#PromiseController+reject)
     * [.reset()](#PromiseController+reset)
-    * [.timeout(ms, [reason])](#PromiseController+timeout)
+    * [.configure(options)](#PromiseController+configure)
 
 <a name="new_PromiseController_new"></a>
 
-#### new PromiseController()
+#### new PromiseController([options])
 Creates promise controller. Unlike original Promise, it does not immediately call any function.
 Instead it has [.call()](#PromiseController+call) method that calls provided function
 and stores `resolve / reject` methods for future access.
+
+
+| Param | Type |
+| --- | --- |
+| [options] | [<code>Options</code>](#Options) | 
 
 <a name="PromiseController+promise"></a>
 
@@ -150,12 +169,6 @@ Returns true if promise rejected.
 
 #### pController.isSettled ⇒ <code>Boolean</code>
 Returns true if promise is fulfilled or rejected.
-
-**Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
-<a name="PromiseController+isCalled"></a>
-
-#### pController.isCalled ⇒ <code>Boolean</code>
-Returns true if promise already called via `.call()` method.
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+call"></a>
@@ -200,17 +213,28 @@ Resets to initial state.
 If promise is pending it will be rejected with error: "Promise rejected by reset".
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
-<a name="PromiseController+timeout"></a>
+<a name="PromiseController+configure"></a>
 
-#### pController.timeout(ms, [reason])
-Configures timeout for automatic promise rejection.
+#### pController.configure(options)
+Re-assign one or more options.
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| ms | <code>Number</code> | delay in ms after that promise will be rejected automatically |
-| [reason] | <code>String</code> \| <code>Error</code> \| <code>function</code> | rejection value. If it is string or Error - promise will be rejected with that error. If it is function - this function will be called after delay where you can manually resolve or reject promise via `.resolve() / .reject()` methods of controller. |
+| Param | Type |
+| --- | --- |
+| options | [<code>Options</code>](#Options) | 
+
+<a name="Options"></a>
+
+### Options : <code>Object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| [timeout] | <code>Number</code> | <code>0</code> | Timeout in ms after that promise will be rejected automatically. |
+| [timeoutReason] | <code>String</code> \| <code>Error</code> \| <code>function</code> |  | Rejection reason for timeout. If it is string or Error - promise will be rejected with that error. If it is function - this function will be called after timeout where you can manually resolve or reject promise via `.resolve() / .reject()` methods of controller. |
+| [resetReason] | <code>String</code> |  | Rejection reason used when `.reset` is called while promise is pending. |
 
 ## Related projects
 * [event-to-promise](https://github.com/JsCommunity/event-to-promise)

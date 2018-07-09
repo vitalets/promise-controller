@@ -7,6 +7,7 @@
     "assert": false,
     "noop": false,
     "wait": false,
+    "PromiseController": false,
     "safeReject": false,
     "assertRejected": false
   },
