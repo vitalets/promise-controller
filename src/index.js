@@ -32,7 +32,7 @@ class PromiseController {
   }
 
   /**
-   * Returns value with that promise was fulfilled (resolved or rejected).
+   * Returns value with that promise was settled (fulfilled or rejected).
    *
    * @returns {*}
    */
@@ -68,7 +68,7 @@ class PromiseController {
   }
 
   /**
-   * Returns true if promise fulfilled or rejected.
+   * Returns true if promise is fulfilled or rejected.
    *
    * @returns {Boolean}
    */
@@ -87,7 +87,8 @@ class PromiseController {
 
   /**
    * This method executes `fn` and returns promise. While promise is pending all subsequent calls of `.call(fn)`
-   * will return the same promise. To fulfill that promise you can use `.resolve() / .reject()` methods.
+   * will return the same promise. To fulfill that promise you should use `.resolve() / .reject()` methods.
+   * If `fn` itself returns promise, then external promise is attached to it and fulfills together.
    *
    * @param {Function} fn
    * @returns {Promise}
@@ -134,6 +135,7 @@ class PromiseController {
 
   /**
    * Resets to initial state.
+   * If promise is pending it will be rejected with error: "Promise rejected by reset".
    */
   reset() {
     if (this._isPending) {
