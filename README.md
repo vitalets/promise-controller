@@ -17,7 +17,7 @@ npm install promise-controller --save
 2. [Re-use of existing promise while operation is not finished](#2-re-use-of-existing-promise-while-operation-is-not-finished)
 3. [Auto-reject after configured timeout](#3-auto-reject-after-configured-timeout)
 
-#### 1. Easy access to `resolve` / `reject` callbacks
+### 1. Easy access to `resolve` / `reject` callbacks
 If in some place of your code you are storing `resolve / reject` callbacks for the future fulfillment:
 ```js
 let _resolve, _reject;
@@ -39,7 +39,7 @@ let promise = promiseController.call(() => callAsyncFunciton());
 promiseController.resolve(value);
 ```
 
-#### 2. Re-use of existing promise while operation is not finished
+### 2. Re-use of existing promise while operation is not finished
 If you rely on some flag to avoid creating new promises while operation is not finished
 (for example when connecting to database):
 ```js
@@ -61,7 +61,7 @@ function connectToDb() {
 }
 ```
 
-#### 3. Auto-reject after configured timeout
+### 3. Auto-reject after configured timeout
 If you want promise to auto-reject after timeout:
 ```js
 let timer;
@@ -137,43 +137,43 @@ and stores `resolve / reject` methods for future access.
 
 <a name="PromiseController+promise"></a>
 
-#### pController.promise ⇒ <code>Promise</code>
+#### pc.promise ⇒ <code>Promise</code>
 Returns promise itself.
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+value"></a>
 
-#### pController.value ⇒ <code>\*</code>
+#### pc.value ⇒ <code>\*</code>
 Returns value with that promise was settled (fulfilled or rejected).
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+isPending"></a>
 
-#### pController.isPending ⇒ <code>Boolean</code>
+#### pc.isPending ⇒ <code>Boolean</code>
 Returns true if promise is pending.
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+isFulfilled"></a>
 
-#### pController.isFulfilled ⇒ <code>Boolean</code>
+#### pc.isFulfilled ⇒ <code>Boolean</code>
 Returns true if promise is fulfilled.
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+isRejected"></a>
 
-#### pController.isRejected ⇒ <code>Boolean</code>
+#### pc.isRejected ⇒ <code>Boolean</code>
 Returns true if promise rejected.
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+isSettled"></a>
 
-#### pController.isSettled ⇒ <code>Boolean</code>
+#### pc.isSettled ⇒ <code>Boolean</code>
 Returns true if promise is fulfilled or rejected.
 
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+call"></a>
 
-#### pController.call(fn) ⇒ <code>Promise</code>
+#### pc.call(fn) ⇒ <code>Promise</code>
 This method executes `fn` and returns promise. While promise is pending all subsequent calls of `.call(fn)`
 will return the same promise. To fulfill that promise you should use `.resolve() / .reject()` methods.
 If `fn` itself returns promise, then external promise is attached to it and fulfills together.
@@ -186,7 +186,7 @@ If `fn` itself returns promise, then external promise is attached to it and fulf
 
 <a name="PromiseController+resolve"></a>
 
-#### pController.resolve([value])
+#### pc.resolve([value])
 Resolves pending promise with specified `value`.
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
@@ -197,7 +197,7 @@ Resolves pending promise with specified `value`.
 
 <a name="PromiseController+reject"></a>
 
-#### pController.reject([value])
+#### pc.reject([value])
 Rejects pending promise with specified `value`.
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
@@ -208,14 +208,14 @@ Rejects pending promise with specified `value`.
 
 <a name="PromiseController+reset"></a>
 
-#### pController.reset()
+#### pc.reset()
 Resets to initial state.
 If promise is pending it will be rejected with error: "Promise rejected by reset".
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+configure"></a>
 
-#### pController.configure(options)
+#### pc.configure(options)
 Re-assign one or more options.
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  

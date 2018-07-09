@@ -9,7 +9,7 @@ const defaults = require('./defaults');
 
 /**
  * Promise controller.
- * @typicalname pController
+ * @typicalname pc
  */
 class PromiseController {
   /**
