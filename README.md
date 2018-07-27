@@ -13,11 +13,11 @@ npm install promise-controller --save
 
 ## Use cases
 
-1. [Easy access to `resolve` / `reject` callbacks](#1-easy-access-to-resolve--reject-callbacks)
-2. [Re-use of existing promise while operation is not finished](#2-re-use-of-existing-promise-while-operation-is-not-finished)
+1. [Convenient access to `resolve` / `reject` callbacks](#1-convenient-access-to-resolve--reject-callbacks)
+2. [Re-use of existing promise while operation is pending](#2-re-use-of-existing-promise-while-operation-is-pending)
 3. [Auto-reject after configured timeout](#3-auto-reject-after-configured-timeout)
 
-### 1. Easy access to `resolve` / `reject` callbacks
+### 1. Convenient access to `resolve` / `reject` callbacks
 If in some place of your code you are storing `resolve / reject` callbacks for the future fulfillment:
 ```js
 let _resolve, _reject;
@@ -39,7 +39,7 @@ let promise = promiseController.call(() => callAsyncFunciton());
 promiseController.resolve(value);
 ```
 
-### 2. Re-use of existing promise while operation is not finished
+### 2. Re-use of existing promise while operation is pending
 If you rely on some flag to avoid creating new promises while operation is not finished
 (for example when connecting to database):
 ```js
