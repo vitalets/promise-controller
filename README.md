@@ -172,9 +172,10 @@ Returns true if promise is fulfilled or rejected.
 <a name="PromiseController+call"></a>
 
 #### pc.call(fn) ⇒ <code>Promise</code>
-This method executes `fn` and returns promise. While promise is pending all subsequent calls of `.call(fn)`
-will return the same promise. To fulfill that promise you should use `.resolve() / .reject()` methods.
-If `fn` itself returns promise, then external promise is attached to it and fulfills together.
+Calls `fn` and returns promise. But if the promise returned from previous `call` is still pending,
+the same promise will be returned instead of calling `fn` again. To fulfill that promise
+you should use [resolve](#PromiseController+resolve) / [reject](#PromiseController+reject) methods. If `fn` itself returns promise,
+then external promise is attached to it and fulfills together.
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
 
