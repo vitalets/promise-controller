@@ -13,12 +13,12 @@ npm install promise-controller --save
 
 ## Use cases
 
-1. [Convenient access to `resolve` / `reject` callbacks](#1-convenient-access-to-resolve--reject-callbacks)
-2. [Re-use of existing promise while operation is pending](#2-re-use-of-existing-promise-while-operation-is-pending)
-3. [Auto-reject after configured timeout](#3-auto-reject-after-configured-timeout)
+* [Convenient access to `resolve` / `reject` callbacks](#convenient-access-to-resolve--reject-callbacks)
+* [Re-use of existing promise while operation is pending](#re-use-of-existing-promise-while-operation-is-pending)
+* [Auto-reject after configured timeout](#auto-reject-after-configured-timeout)
 
-### 1. Convenient access to `resolve` / `reject` callbacks
-If in some place of your code you are storing `resolve / reject` callbacks for the future fulfillment:
+### Convenient access to `resolve` / `reject` callbacks
+Before:
 ```js
 let _resolve, _reject;
 let promise = new Promise((resolve, reject) => {
@@ -27,21 +27,23 @@ let promise = new Promise((resolve, reject) => {
  _reject = reject;
 });
 
-// ...after some time
+// ...
 _resolve(value);
 ```
 
-It is actually the use case for `PromiseController`:
+After:
 ```js
-let promise = promiseController.call(() => callAsyncFunciton());
+import PromiseController from 'promise-controller';
 
-// ...after some time
-promiseController.resolve(value);
+let pc = new PromiseController();
+let promise = pc.call(() => callAsyncFunciton());
+
+// ...
+pc.resolve(value);
 ```
 
-### 2. Re-use of existing promise while operation is pending
-If you rely on some flag to avoid creating new promises while operation is not finished
-(for example when connecting to database):
+### Re-use of existing promise while operation is pending
+Before:
 ```js
 let promise = null;
 
@@ -54,15 +56,19 @@ function connectToDb() {
 }
 ```
 
-It is also the use case for `PromiseController`:
+After:
 ```js
+import PromiseController from 'promise-controller';
+
+let pc = new PromiseController();
+
 function connectToDb() {
-  return promiseController.promise || promiseController.call(() => mongoClient.open());
+  return pc.promise || pc.call(() => mongoClient.open());
 }
 ```
 
-### 3. Auto-reject after configured timeout
-If you want to auto-reject promise after timeout:
+### Auto-reject after configured timeout
+Before:
 ```js
 let timer;
 let promise = new Promise((resolve, reject) => {
@@ -70,11 +76,11 @@ let promise = new Promise((resolve, reject) => {
    clearTimeout(timer);
    resolve();
  });
+ // reject promise after timeout
  timer = setTimeout(() => reject(new Error('Timeout')), 1000);
 });
-
 ```
-It can be achieved with `PromiseController` in more direct way:
+After:
 ```js
 let promiseController = new PromiseController({
   timeout: 1000,
