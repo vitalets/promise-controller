@@ -1,5 +1,5 @@
 const chai = require('chai');
-const PromiseController = require(process.env.TEST_LIB ? '../lib' : '../src');
+const PromiseController = require(process.env.LIB_PATH || '../src');
 
 global.assert = chai.assert;
 global.noop = () => {};

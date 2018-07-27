@@ -16,13 +16,14 @@
   "scripts": {
     "code": "npm run lint-all",
     "lint-all": "eslint src test",
-    "babel": "babel src --out-dir lib",
+    "build": "webpack",
+    "build:prod": "webpack --mode=production",
     "test": "mocha test/setup.js test/specs",
-    "test-lib": "npm run babel && TEST_LIB=1 npm t",
-    "test-installed": "node scripts/install-local && LIB_PATH=.installed/node_modules/promise-controller npm t",
-    "ci": "npm run code && npm run test-lib",
+    "test:bundle": "npm run build && LIB_PATH=../lib/bundle.dev.js npm t",
+    "test:installed": "node scripts/install-local && LIB_PATH=../.installed/node_modules/promise-controller npm t",
+    "ci": "run-s code test:bundle",
     "docs": "node scripts/docs",
-    "prerelease": "npm run code && npm test && npm run test-lib && npm run test-installed",
+    "prerelease": "run-s code test test:bundle build:prod test:installed",
     "release": "npm version $VER && npm publish && git push --follow-tags --no-verify",
     "release-patch": "VER=patch npm run release",
     "release-minor": "VER=minor npm run release",
@@ -32,22 +33,22 @@
   "lint-staged": {
     "{src,test}/**/*.js": "eslint"
   },
-  "main": "lib/index.js",
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  },
+  "main": "lib/bundle.prod.js",
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.1",
+    "clean-webpack-plugin": "^0.1.19",
     "eslint": "^4.4.1",
     "husky": "^0.14.3",
     "install-local": "^0.4.0",
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^4.0.3",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "npm-run-all": "^4.1.3",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0"
   },
   "keywords": [
     "promise",
