@@ -81,12 +81,13 @@ class PromiseController {
   }
 
   /**
-   * Calls `fn` and returns promise. But if the promise returned from previous `call` is still pending,
-   * the same promise will be returned instead of calling `fn` again. To fulfill that promise
-   * you should use {@link PromiseController#resolve} / {@link PromiseController#reject} methods.
+   * Calls `fn` and returns promise OR just returns existing promise from previous `call()` if it is still pending.
+   * To fulfill returned promise you should use
+   * {@link PromiseController#resolve} / {@link PromiseController#reject} methods.
    * If `fn` itself returns promise, then external promise is attached to it and fulfills together.
+   * If no `fn` passed - promiseController is initialized as well.
    *
-   * @param {Function} fn
+   * @param {Function} [fn] function to be called.
    * @returns {Promise}
    */
   call(fn) {

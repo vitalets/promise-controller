@@ -121,7 +121,7 @@ let promise = promiseController.call(() => {
     * [.isFulfilled](#PromiseController+isFulfilled) ⇒ <code>Boolean</code>
     * [.isRejected](#PromiseController+isRejected) ⇒ <code>Boolean</code>
     * [.isSettled](#PromiseController+isSettled) ⇒ <code>Boolean</code>
-    * [.call(fn)](#PromiseController+call) ⇒ <code>Promise</code>
+    * [.call([fn])](#PromiseController+call) ⇒ <code>Promise</code>
     * [.resolve([value])](#PromiseController+resolve)
     * [.reject([value])](#PromiseController+reject)
     * [.reset()](#PromiseController+reset)
@@ -177,17 +177,18 @@ Returns true if promise is fulfilled or rejected.
 **Kind**: instance property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+call"></a>
 
-#### pc.call(fn) ⇒ <code>Promise</code>
-Calls `fn` and returns promise. But if the promise returned from previous `call` is still pending,
-the same promise will be returned instead of calling `fn` again. To fulfill that promise
-you should use [resolve](#PromiseController+resolve) / [reject](#PromiseController+reject) methods. If `fn` itself returns promise,
-then external promise is attached to it and fulfills together.
+#### pc.call([fn]) ⇒ <code>Promise</code>
+Calls `fn` and returns promise OR just returns existing promise from previous `call()` if it is still pending.
+To fulfill returned promise you should use
+[resolve](#PromiseController+resolve) / [reject](#PromiseController+reject) methods.
+If `fn` itself returns promise, then external promise is attached to it and fulfills together.
+If no `fn` passed - promiseController is initialized as well.
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
 
-| Param | Type |
-| --- | --- |
-| fn | <code>function</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| [fn] | <code>function</code> | function to be called. |
 
 <a name="PromiseController+resolve"></a>
 
