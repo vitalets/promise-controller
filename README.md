@@ -27,7 +27,7 @@ pc.reject();
 
 * [Easy access to `resolve` / `reject` callbacks](#easy-access-to-resolve--reject-callbacks)
 * [Re-use of existing promise while operation is pending](#re-use-of-existing-promise-while-operation-is-pending)
-* [Auto-reject after timeout](#auto-reject-after-timeout)
+* [Automatically reject after timeout](#automatically-reject-after-timeout)
 
 ### Easy access to `resolve` / `reject` callbacks
 With bare Promise:
