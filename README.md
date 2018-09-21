@@ -254,7 +254,7 @@ Error for rejection in case of timeout.
 <a name="PromiseController.ResetError"></a>
 
 #### PromiseController.ResetError : [<code>ResetError</code>](#PromiseController.ResetError)
-Error for rejection in case of call `.reset` if promise is still pending.
+Error for rejection in case of call `.reset()` while promise is pending.
 
 **Kind**: static class of [<code>PromiseController</code>](#PromiseController)  
 <a name="Options"></a>

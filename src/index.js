@@ -214,7 +214,7 @@ class PromiseController {
 PromiseController.TimeoutError = class extends Error {};
 
 /**
- * Error for rejection in case of call `.reset` if promise is still pending.
+ * Error for rejection in case of call `.reset()` while promise is pending.
  * @type {PromiseController.ResetError}
  */
 PromiseController.ResetError = class extends Error {};
