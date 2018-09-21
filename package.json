@@ -28,7 +28,7 @@
     "release-patch": "VER=patch npm run release",
     "release-minor": "VER=minor npm run release",
     "precommit": "lint-staged && npm t",
-    "prepush": "npm run code && npm t"
+    "prepush": "run-s code test test:bundle"
   },
   "lint-staged": {
     "{src,test}/**/*.js": "eslint"

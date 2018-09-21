@@ -2,7 +2,7 @@
  * @ignore
  */
 const defaults = require('./defaults');
-const {isPromise} = require('./utils');
+const {isPromise, createErrorType} = require('./utils');
 
 /**
  * @typicalname pc
@@ -211,12 +211,12 @@ class PromiseController {
  * Error for rejection in case of timeout.
  * @type {PromiseController.TimeoutError}
  */
-PromiseController.TimeoutError = class extends Error {};
+PromiseController.TimeoutError = createErrorType('TimeoutError');
 
 /**
  * Error for rejection in case of call `.reset()` while promise is pending.
  * @type {PromiseController.ResetError}
  */
-PromiseController.ResetError = class extends Error {};
+PromiseController.ResetError = createErrorType('ResetError');
 
 module.exports = PromiseController;
