@@ -12,9 +12,9 @@ describe('call', function () {
   });
 
   it('should call passed fn', function () {
-    let a = 0;
-    this.cp.call(() => a++);
-    assert.equal(a, 1);
+    const spy = sinon.spy();
+    this.cp.call(spy);
+    sinon.assert.calledOnce(spy);
   });
 
   it('should return the same promise if it is pending', function () {

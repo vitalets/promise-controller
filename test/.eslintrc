@@ -5,6 +5,7 @@
 
   "globals": {
     "assert": false,
+    "sinon": false,
     "noop": false,
     "wait": false,
     "PromiseController": false,

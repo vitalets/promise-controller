@@ -1,7 +1,9 @@
 const chai = require('chai');
+const sinon = require('sinon');
 const PromiseController = require(process.env.LIB_PATH || '../src');
 
 global.assert = chai.assert;
+global.sinon = sinon;
 global.noop = () => {};
 global.wait = ms => new Promise(r => setTimeout(r, ms));
 global.safeReject = promise => promise.catch(() => {});
