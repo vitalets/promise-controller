@@ -14,7 +14,7 @@ beforeEach(function () {
   this.cp = new PromiseController();
 });
 
-async function assertRejected(promise, err) {
+async function assertRejected(promise, ...args) {
   let f = () => { };
   let catched = false;
   try {
@@ -23,9 +23,9 @@ async function assertRejected(promise, err) {
     catched = true;
     f = () => { throw e; };
   } finally {
-    const checkRejectedValue = err !== undefined || !catched;
+    const checkRejectedValue = args.length > 0 || !catched;
     if (checkRejectedValue) {
-      assert.throws(f, err);
+      assert.throws(f, ...args);
     }
   }
 }

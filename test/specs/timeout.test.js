@@ -11,7 +11,7 @@ describe('timeout', function () {
     const p = cp.call();
     safeReject(p);
     setTimeout(() => cp.resolve('foo'), 20);
-    await assertRejected(p, 'Promise rejected by timeout');
+    await assertRejected(p, PromiseController.TimeoutError, 'Promise rejected by timeout');
   });
 
   it('should reject after timeout (custom error)', async function () {
@@ -19,45 +19,7 @@ describe('timeout', function () {
     const p = cp.call();
     safeReject(p);
     await wait(5);
-    await assertRejected(p, 'err');
-  });
-
-  it('should reject after timeout (custom fn)', async function () {
-    const cp = new PromiseController({
-      timeout: 10,
-      timeoutReason: () => cp.reject('err')
-    });
-    const p = cp.call();
-    await wait(5);
-    await assertRejected(p, 'err');
-  });
-
-  it('should not call custom fn if resolved', async function () {
-    const spy = sinon.spy();
-    const cp = new PromiseController({timeout: 5, timeoutReason: spy});
-    cp.call();
-    cp.resolve();
-    await wait(10);
-    sinon.assert.notCalled(spy);
-  });
-
-  it('should not call custom fn if rejected', async function () {
-    const spy = sinon.spy();
-    const cp = new PromiseController({timeout: 5, timeoutReason: spy});
-    const p = cp.call();
-    safeReject(p);
-    cp.reject();
-    await wait(10);
-    sinon.assert.notCalled(spy);
-  });
-
-  it('should not call custom fn if rejected in fn', async function () {
-    const spy = sinon.spy();
-    const cp = new PromiseController({timeout: 5, timeoutReason: spy});
-    const p = cp.call(() => {throw new Error('err');});
-    safeReject(p);
-    await wait(10);
-    sinon.assert.notCalled(spy);
+    await assertRejected(p, PromiseController.TimeoutError, 'err');
   });
 
   it('should reject after configured timeout and error', async function () {

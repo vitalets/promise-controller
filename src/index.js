@@ -2,6 +2,7 @@
  * @ignore
  */
 const defaults = require('./defaults');
+const {isPromise} = require('./utils');
 
 /**
  * @typicalname pc
@@ -132,11 +133,12 @@ class PromiseController {
 
   /**
    * Resets to initial state.
-   * If promise is pending it will be rejected with error: "Promise rejected by reset".
+   * If promise is pending it will be rejected with {@link PromiseController.ResetError}.
    */
   reset() {
     if (this._isPending) {
-      this.reject(new Error(this._options.resetReason));
+      const error = new PromiseController.ResetError(this._options.resetReason);
+      this.reject(error);
     }
     this._promise = null;
     this._isPending = false;
@@ -164,13 +166,8 @@ class PromiseController {
   }
 
   _handleTimeout() {
-    const {timeoutReason} = this._options;
-    if (typeof timeoutReason === 'function') {
-      timeoutReason();
-    } else {
-      const error = typeof timeoutReason === 'string' ? new Error(timeoutReason) : timeoutReason;
-      this.reject(error);
-    }
+    const error = new PromiseController.TimeoutError(this._options.timeoutReason);
+    this.reject(error);
   }
 
   _createTimer() {
@@ -210,8 +207,16 @@ class PromiseController {
   }
 }
 
-function isPromise(p) {
-  return p && typeof p.then === 'function';
-}
+/**
+ * Error for rejection in case of timeout.
+ * @type {PromiseController.TimeoutError}
+ */
+PromiseController.TimeoutError = class extends Error {};
+
+/**
+ * Error for rejection in case of call `.reset` if promise is still pending.
+ * @type {PromiseController.ResetError}
+ */
+PromiseController.ResetError = class extends Error {};
 
 module.exports = PromiseController;

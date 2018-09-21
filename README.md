@@ -11,85 +11,96 @@ Advanced control of JavaScript promises.
 npm install promise-controller --save
 ```
 
-## Use cases
-
-* [Convenient access to `resolve` / `reject` callbacks](#convenient-access-to-resolve--reject-callbacks)
-* [Re-use of existing promise while operation is pending](#re-use-of-existing-promise-while-operation-is-pending)
-* [Auto-reject after configured timeout](#auto-reject-after-configured-timeout)
-
-### Convenient access to `resolve` / `reject` callbacks
-Before:
-```js
-let _resolve, _reject;
-let promise = new Promise((resolve, reject) => {
- callAsyncFunciton();
- _resolve = resolve;
- _reject = reject;
-});
-
-// ...
-_resolve(value);
-```
-
-After:
+## Usage
 ```js
 import PromiseController from 'promise-controller';
 
-let pc = new PromiseController();
-let promise = pc.call(() => callAsyncFunciton());
+const pc = new PromiseController();
+const promise = pc.call(() => startAsyncProcess());
+// ...when async process done
+pc.resolve('done');
+// or
+pc.reject();
+```
 
-// ...
-pc.resolve(value);
+## Use cases
+
+* [Easy access to `resolve` / `reject` callbacks](#easy-access-to-resolve--reject-callbacks)
+* [Re-use of existing promise while operation is pending](#re-use-of-existing-promise-while-operation-is-pending)
+* [Auto-reject after timeout](#auto-reject-after-timeout)
+
+### Easy access to `resolve` / `reject` callbacks
+With bare Promise:
+```js
+let resolve, reject;
+
+const asyncOperation = setTimeout(() => Math.random() > 0.5 ? resolve() : reject(), 100);
+
+const promise = new Promise((_resolve, _reject) => {
+   resolve = _resolve;
+   reject = _reject;
+   asyncOperation();
+});
+```
+
+With PromiseController:
+```js
+const pc = new PromiseController();
+
+const asyncOperation = setTimeout(() => Math.random() > 0.5 ? pc.resolve() : pc.reject(), 100);
+
+const promise = pc.call(asyncOperation);
 ```
 
 ### Re-use of existing promise while operation is pending
-Before:
+With bare Promise:
 ```js
 let promise = null;
 
 function connectToDb() {
- if (!promise) {
-   promise = mongoClient.open();
- }
+    if (!promise) {
+        promise = mongoClient.open();
+    }
 
- return promise;
+    return promise;
 }
 ```
 
-After:
+With PromiseController:
 ```js
-import PromiseController from 'promise-controller';
-
-let pc = new PromiseController();
+const pc = new PromiseController();
 
 function connectToDb() {
-  return pc.promise || pc.call(() => mongoClient.open());
+    return pc.promise || pc.call(() => mongoClient.open());
 }
 ```
 
-### Auto-reject after configured timeout
-Before:
+### Automatically reject after timeout
+With bare Promise:
 ```js
-let timer;
-let promise = new Promise((resolve, reject) => {
- callAsyncFunciton(() => {
-   clearTimeout(timer);
-   resolve();
- });
- // reject promise after timeout
- timer = setTimeout(() => reject(new Error('Timeout')), 1000);
+let resolve, timer;
+
+const asyncOperation = setTimeout(() => {
+    resolve();
+    clearTimeout(timer);
+}, 100);
+
+const promise = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    asyncOperation();
+    timer = setTimeout(() => _reject(), 50);
 });
 ```
-After:
+
+With PromiseController:
 ```js
-let promiseController = new PromiseController({
-  timeout: 1000,
-  timeoutReason: 'Timeout'
+const pc = new PromiseController({
+  timeout: 50
 });
 
-let promise = promiseController.call(() => {
-   callAsyncFunciton(() => promiseController.resolve());
-})
+const asyncOperation = setTimeout(() => resolve(), 100);
+
+const promise = pc.call(asyncOperation);
 ```
 
 ## API
@@ -115,17 +126,21 @@ let promise = promiseController.call(() => {
 
 * [PromiseController](#PromiseController)
     * [new PromiseController([options])](#new_PromiseController_new)
-    * [.promise](#PromiseController+promise) ⇒ <code>Promise</code>
-    * [.value](#PromiseController+value) ⇒ <code>\*</code>
-    * [.isPending](#PromiseController+isPending) ⇒ <code>Boolean</code>
-    * [.isFulfilled](#PromiseController+isFulfilled) ⇒ <code>Boolean</code>
-    * [.isRejected](#PromiseController+isRejected) ⇒ <code>Boolean</code>
-    * [.isSettled](#PromiseController+isSettled) ⇒ <code>Boolean</code>
-    * [.call([fn])](#PromiseController+call) ⇒ <code>Promise</code>
-    * [.resolve([value])](#PromiseController+resolve)
-    * [.reject([value])](#PromiseController+reject)
-    * [.reset()](#PromiseController+reset)
-    * [.configure(options)](#PromiseController+configure)
+    * _instance_
+        * [.promise](#PromiseController+promise) ⇒ <code>Promise</code>
+        * [.value](#PromiseController+value) ⇒ <code>\*</code>
+        * [.isPending](#PromiseController+isPending) ⇒ <code>Boolean</code>
+        * [.isFulfilled](#PromiseController+isFulfilled) ⇒ <code>Boolean</code>
+        * [.isRejected](#PromiseController+isRejected) ⇒ <code>Boolean</code>
+        * [.isSettled](#PromiseController+isSettled) ⇒ <code>Boolean</code>
+        * [.call([fn])](#PromiseController+call) ⇒ <code>Promise</code>
+        * [.resolve([value])](#PromiseController+resolve)
+        * [.reject([value])](#PromiseController+reject)
+        * [.reset()](#PromiseController+reset)
+        * [.configure(options)](#PromiseController+configure)
+    * _static_
+        * [.TimeoutError](#PromiseController.TimeoutError) : [<code>TimeoutError</code>](#PromiseController.TimeoutError)
+        * [.ResetError](#PromiseController.ResetError) : [<code>ResetError</code>](#PromiseController.ResetError)
 
 <a name="new_PromiseController_new"></a>
 
@@ -216,7 +231,7 @@ Rejects pending promise with specified `value`.
 
 #### pc.reset()
 Resets to initial state.
-If promise is pending it will be rejected with error: "Promise rejected by reset".
+If promise is pending it will be rejected with [ResetError](#PromiseController.ResetError).
 
 **Kind**: instance method of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController+configure"></a>
@@ -230,6 +245,18 @@ Re-assign one or more options.
 | --- | --- |
 | options | [<code>Options</code>](#Options) | 
 
+<a name="PromiseController.TimeoutError"></a>
+
+#### PromiseController.TimeoutError : [<code>TimeoutError</code>](#PromiseController.TimeoutError)
+Error for rejection in case of timeout.
+
+**Kind**: static class of [<code>PromiseController</code>](#PromiseController)  
+<a name="PromiseController.ResetError"></a>
+
+#### PromiseController.ResetError : [<code>ResetError</code>](#PromiseController.ResetError)
+Error for rejection in case of call `.reset` if promise is still pending.
+
+**Kind**: static class of [<code>PromiseController</code>](#PromiseController)  
 <a name="Options"></a>
 
 ### Options : <code>Object</code>
@@ -239,8 +266,8 @@ Re-assign one or more options.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | [timeout] | <code>Number</code> | <code>0</code> | Timeout in ms after that promise will be rejected automatically. |
-| [timeoutReason] | <code>String</code> \| <code>Error</code> \| <code>function</code> |  | Rejection reason for timeout. If it is string or Error - promise will be rejected with that error. If it is function - this function will be called after timeout where you can manually resolve or reject promise via `.resolve() / .reject()` methods of controller. |
-| [resetReason] | <code>String</code> |  | Rejection reason used when `.reset` is called while promise is pending. |
+| [timeoutReason] | <code>String</code> |  | Rejection reason for timeout. Promise will be rejected with [TimeoutError](#PromiseController.TimeoutError) and this message. |
+| [resetReason] | <code>String</code> |  | Rejection reason used when `.reset()` is called while promise is pending. Promise will be rejected with [ResetError](#PromiseController.ResetError) and this message. |
 
 ## Related projects
 * [event-to-promise](https://github.com/JsCommunity/event-to-promise)
