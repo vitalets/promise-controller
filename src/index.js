@@ -166,7 +166,8 @@ class PromiseController {
   }
 
   _handleTimeout() {
-    const error = new PromiseController.TimeoutError(this._options.timeoutReason);
+    const message = this._options.timeoutReason.replace('{timeout}', this._options.timeout);
+    const error = new PromiseController.TimeoutError(message);
     this.reject(error);
   }
 

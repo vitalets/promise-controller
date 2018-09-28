@@ -6,6 +6,7 @@ exports.isPromise = function (p) {
 /**
  * Just `class MyError extends Error` does not work with transpiler.
  * See: https://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript
+ * @ignore
  */
 exports.createErrorType = function (name) {
   function E(message) {

@@ -11,7 +11,7 @@ describe('timeout', function () {
     const p = cp.call();
     safeReject(p);
     setTimeout(() => cp.resolve('foo'), 20);
-    await assertRejected(p, PromiseController.TimeoutError, 'Promise rejected by timeout');
+    await assertRejected(p, PromiseController.TimeoutError, 'Promise rejected by PromiseController timeout 10 ms.');
   });
 
   it('should reject after timeout (custom error)', async function () {
@@ -22,12 +22,12 @@ describe('timeout', function () {
     await assertRejected(p, PromiseController.TimeoutError, 'err');
   });
 
-  it('should reject after configured timeout and error', async function () {
+  it('should reject after configured timeout with custom error and placeholder', async function () {
     const cp = new PromiseController({timeout: 50});
-    cp.configure({timeout: 10, timeoutReason: 'err'});
+    cp.configure({timeout: 10, timeoutReason: 'Timeout {timeout}'});
     const p = cp.call();
     safeReject(p);
     setTimeout(() => cp.resolve('foo'), 20);
-    await assertRejected(p, 'err');
+    await assertRejected(p, 'Timeout 10');
   });
 });

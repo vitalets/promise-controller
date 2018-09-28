@@ -15,7 +15,7 @@ describe('reset', function () {
     assert.equal(this.cp.isRejected, false);
     assert.equal(this.cp.isPending, false);
     assert.equal(this.cp.value, undefined);
-    await assertRejected(p, PromiseController.ResetError, 'Promise rejected by reset');
+    await assertRejected(p, PromiseController.ResetError, 'Promise rejected by PromiseController reset.');
     assert.equal(this.cp.isRejected, false);
     assert.equal(this.cp.isPending, false);
     assert.equal(this.cp.value, undefined);

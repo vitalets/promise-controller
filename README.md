@@ -250,13 +250,13 @@ Re-assign one or more options.
 #### PromiseController.TimeoutError : [<code>TimeoutError</code>](#PromiseController.TimeoutError)
 Error for rejection in case of timeout.
 
-**Kind**: static class of [<code>PromiseController</code>](#PromiseController)  
+**Kind**: static property of [<code>PromiseController</code>](#PromiseController)  
 <a name="PromiseController.ResetError"></a>
 
 #### PromiseController.ResetError : [<code>ResetError</code>](#PromiseController.ResetError)
 Error for rejection in case of call `.reset()` while promise is pending.
 
-**Kind**: static class of [<code>PromiseController</code>](#PromiseController)  
+**Kind**: static property of [<code>PromiseController</code>](#PromiseController)  
 <a name="Options"></a>
 
 ### Options : <code>Object</code>
@@ -266,7 +266,7 @@ Error for rejection in case of call `.reset()` while promise is pending.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | [timeout] | <code>Number</code> | <code>0</code> | Timeout in ms after that promise will be rejected automatically. |
-| [timeoutReason] | <code>String</code> |  | Rejection reason for timeout. Promise will be rejected with [TimeoutError](#PromiseController.TimeoutError) and this message. |
+| [timeoutReason] | <code>String</code> |  | Rejection reason for timeout. Promise will be rejected with [TimeoutError](#PromiseController.TimeoutError) and this message. The message can contain placeholder `{timeout}` for actual timeout value. |
 | [resetReason] | <code>String</code> |  | Rejection reason used when `.reset()` is called while promise is pending. Promise will be rejected with [ResetError](#PromiseController.ResetError) and this message. |
 
 ## Related projects
