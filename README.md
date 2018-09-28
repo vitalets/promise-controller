@@ -266,8 +266,8 @@ Error for rejection in case of call `.reset()` while promise is pending.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | [timeout] | <code>Number</code> | <code>0</code> | Timeout in ms after that promise will be rejected automatically. |
-| [timeoutReason] | <code>String</code> |  | Rejection reason for timeout. Promise will be rejected with [TimeoutError](#PromiseController.TimeoutError) and this message. The message can contain placeholder `{timeout}` for actual timeout value. |
-| [resetReason] | <code>String</code> |  | Rejection reason used when `.reset()` is called while promise is pending. Promise will be rejected with [ResetError](#PromiseController.ResetError) and this message. |
+| [timeoutReason] | <code>String</code> \| <code>function</code> |  | Rejection reason for timeout. Promise will be rejected with [TimeoutError](#PromiseController.TimeoutError) and this message. The message can contain placeholder `{timeout}` for actual timeout value. If timeoutReason is a function, it will be evaluated and returned value will be used as message. |
+| [resetReason] | <code>String</code> \| <code>function</code> |  | Rejection reason used when `.reset()` is called while promise is pending. Promise will be rejected with [ResetError](#PromiseController.ResetError) and this message. If resetReason is a function, it will be evaluated and returned value will be used as message. |
 
 ## Related projects
 * [event-to-promise](https://github.com/JsCommunity/event-to-promise)

@@ -2,7 +2,7 @@
  * @ignore
  */
 const defaults = require('./defaults');
-const {isPromise, createErrorType} = require('./utils');
+const {isPromise, createErrorType, tryCall} = require('./utils');
 
 /**
  * @typicalname pc
@@ -137,7 +137,8 @@ class PromiseController {
    */
   reset() {
     if (this._isPending) {
-      const error = new PromiseController.ResetError(this._options.resetReason);
+      const message = tryCall(this._options.resetReason);
+      const error = new PromiseController.ResetError(message);
       this.reject(error);
     }
     this._promise = null;
@@ -166,7 +167,8 @@ class PromiseController {
   }
 
   _handleTimeout() {
-    const message = this._options.timeoutReason.replace('{timeout}', this._options.timeout);
+    const messageTpl = tryCall(this._options.timeoutReason);
+    const message = typeof messageTpl === 'string' ? messageTpl.replace('{timeout}', this._options.timeout) : '';
     const error = new PromiseController.TimeoutError(message);
     this.reject(error);
   }

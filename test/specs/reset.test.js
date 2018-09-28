@@ -27,4 +27,11 @@ describe('reset', function () {
     cp.reset();
     await assertRejected(p, PromiseController.ResetError, 'reset');
   });
+
+  it('should reject pending promise with custom error message as function', async function () {
+    const cp = new PromiseController({resetReason: () => 'reset'});
+    const p = cp.call(noop);
+    cp.reset();
+    await assertRejected(p, PromiseController.ResetError, 'reset');
+  });
 });
