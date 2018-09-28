@@ -6,3 +6,4 @@
 /.installed/
 /test
 /scripts
+/webpack.config.js
